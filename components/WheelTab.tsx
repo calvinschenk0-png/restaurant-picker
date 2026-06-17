@@ -60,7 +60,7 @@ function drawWheel(canvas: HTMLCanvasElement, items: Restaurant[]) {
     ctx.rotate(mid);
     ctx.textAlign = "right";
     ctx.fillStyle = "white";
-    const fontSize = Math.min(13, Math.max(7, 200 / n));
+    const fontSize = Math.min(22, Math.max(12, 280 / n));
     ctx.font = `bold ${fontSize}px system-ui, sans-serif`;
     ctx.shadowColor = "rgba(0,0,0,0.3)";
     ctx.shadowBlur = 3;
