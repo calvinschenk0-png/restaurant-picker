@@ -30,17 +30,17 @@ export default function ResultsView({ restaurants, locationName, onRestart }: Pr
   ];
 
   return (
-    <div className="h-dvh flex flex-col overflow-hidden bg-white">
+    <div className="h-dvh flex flex-col overflow-hidden bg-black">
       {/* Header */}
-      <div className="px-6 pt-10 pb-0 bg-white border-b border-gray-100">
+      <div className="px-6 pt-10 pb-0 bg-black border-b border-gray-800">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <p className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-0.5">Restaurant Picker</p>
-            <h1 className="text-2xl font-extrabold text-gray-900 leading-tight">Near {locationName}</h1>
+            <p className="text-xs font-bold text-red-500 uppercase tracking-widest mb-0.5">Restaurant Picker</p>
+            <h1 className="text-2xl font-extrabold text-white leading-tight">Near {locationName}</h1>
           </div>
           <button
             onClick={onRestart}
-            className="flex-shrink-0 mt-1 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors"
+            className="flex-shrink-0 mt-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors"
           >
             New search
           </button>
@@ -54,8 +54,8 @@ export default function ResultsView({ restaurants, locationName, onRestart }: Pr
               onClick={() => setActiveTab(tab.id)}
               className={`px-5 py-3 text-sm font-bold border-b-2 transition-colors ${
                 activeTab === tab.id
-                  ? "border-orange-500 text-orange-500"
-                  : "border-transparent text-gray-400 hover:text-gray-600"
+                  ? "border-red-500 text-red-500"
+                  : "border-transparent text-gray-600 hover:text-gray-400"
               }`}
             >
               {tab.label}
@@ -65,7 +65,7 @@ export default function ResultsView({ restaurants, locationName, onRestart }: Pr
       </div>
 
       {/* Tab content */}
-      <div className="flex-1 bg-gray-50 flex flex-col overflow-hidden">
+      <div className="flex-1 bg-gray-950 flex flex-col overflow-hidden">
         {activeTab === "list" && (
           <div className="flex-1 overflow-y-auto">
             <div className="max-w-lg mx-auto px-4 py-4">
@@ -73,7 +73,7 @@ export default function ResultsView({ restaurants, locationName, onRestart }: Pr
                 <EmptyState />
               ) : (
                 <>
-                  <p className="text-xs font-extrabold text-orange-500 uppercase tracking-widest mb-3 px-1">Top Picks</p>
+                  <p className="text-xs font-extrabold text-red-500 uppercase tracking-widest mb-3 px-1">Top Picks</p>
                   <div className="space-y-2">
                     {top5.map((r, i) => (
                       <RestaurantCard key={r.id} restaurant={r} rank={i + 1} onTap={() => setSelected(r)} />
@@ -81,7 +81,7 @@ export default function ResultsView({ restaurants, locationName, onRestart }: Pr
                   </div>
                   {rest.length > 0 && (
                     <>
-                      <p className="text-xs font-extrabold text-gray-300 uppercase tracking-widest mt-6 mb-3 px-1">More Nearby</p>
+                      <p className="text-xs font-extrabold text-gray-600 uppercase tracking-widest mt-6 mb-3 px-1">More Nearby</p>
                       <div className="space-y-2">
                         {rest.map((r) => (
                           <RestaurantCard key={r.id} restaurant={r} onTap={() => setSelected(r)} />
@@ -108,8 +108,8 @@ export default function ResultsView({ restaurants, locationName, onRestart }: Pr
 function EmptyState() {
   return (
     <div className="text-center py-16 px-4">
-      <p className="text-gray-500 font-bold">No restaurants found nearby.</p>
-      <p className="text-gray-400 text-sm mt-1">Try a wider distance or different cuisine.</p>
+      <p className="text-gray-400 font-bold">No restaurants found nearby.</p>
+      <p className="text-gray-600 text-sm mt-1">Try a wider distance or different cuisine.</p>
     </div>
   );
 }

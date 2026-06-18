@@ -84,10 +84,11 @@ export default function Home() {
 
   if (step === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center px-6">
-          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 font-medium">Finding restaurants…</p>
+          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white font-extrabold text-lg">Finding restaurants…</p>
+          <p className="text-gray-500 text-sm mt-1 font-medium">This won&apos;t take long.</p>
         </div>
       </div>
     );

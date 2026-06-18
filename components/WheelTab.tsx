@@ -4,9 +4,9 @@ import type { Restaurant } from "@/lib/ranking";
 import DetailOverlay from "@/components/DetailOverlay";
 
 const COLORS = [
-  "#f97316", "#fbbf24", "#34d399", "#60a5fa", "#a78bfa",
-  "#f472b6", "#fb923c", "#a3e635", "#38bdf8", "#c084fc",
-  "#f87171", "#facc15", "#4ade80", "#818cf8",
+  "#dc2626", "#f97316", "#eab308", "#22c55e", "#3b82f6",
+  "#a855f7", "#ec4899", "#14b8a6", "#f43f5e", "#8b5cf6",
+  "#fb923c", "#84cc16", "#06b6d4", "#e879f9",
 ];
 
 interface Props {
@@ -26,9 +26,9 @@ function drawWheel(canvas: HTMLCanvasElement, items: Restaurant[]) {
   if (items.length === 0) {
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-    ctx.fillStyle = "#e5e7eb";
+    ctx.fillStyle = "#1f2937";
     ctx.fill();
-    ctx.fillStyle = "#9ca3af";
+    ctx.fillStyle = "#6b7280";
     ctx.font = "bold 14px system-ui, sans-serif";
     ctx.textAlign = "center";
     ctx.fillText("No restaurants", cx, cy - 8);
@@ -51,7 +51,7 @@ function drawWheel(canvas: HTMLCanvasElement, items: Restaurant[]) {
     ctx.closePath();
     ctx.fillStyle = COLORS[i % COLORS.length];
     ctx.fill();
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = "#000";
     ctx.lineWidth = 2;
     ctx.stroke();
 
@@ -62,7 +62,7 @@ function drawWheel(canvas: HTMLCanvasElement, items: Restaurant[]) {
     ctx.fillStyle = "white";
     const fontSize = Math.min(22, Math.max(12, 280 / n));
     ctx.font = `bold ${fontSize}px system-ui, sans-serif`;
-    ctx.shadowColor = "rgba(0,0,0,0.3)";
+    ctx.shadowColor = "rgba(0,0,0,0.5)";
     ctx.shadowBlur = 3;
     const label = r.name.length > 14 ? r.name.slice(0, 13) + "…" : r.name;
     ctx.fillText(label, radius - 10, fontSize / 3);
@@ -71,15 +71,14 @@ function drawWheel(canvas: HTMLCanvasElement, items: Restaurant[]) {
 
   ctx.beginPath();
   ctx.arc(cx, cy, 10, 0, Math.PI * 2);
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "#111";
   ctx.fill();
-  ctx.strokeStyle = "#e5e7eb";
+  ctx.strokeStyle = "#374151";
   ctx.lineWidth = 2;
   ctx.stroke();
 }
 
 export default function WheelTab({ restaurants }: Props) {
-  // Default: top 5 selected
   const [selected, setSelected] = useState<Set<string>>(
     () => new Set(restaurants.slice(0, 5).map((r) => r.id))
   );
@@ -145,56 +144,42 @@ export default function WheelTab({ restaurants }: Props) {
     resetWheel();
   };
 
-  const selectAll = () => {
-    setSelected(new Set(restaurants.map((r) => r.id)));
-    resetWheel();
-  };
-
-  const selectTop5 = () => {
-    setSelected(new Set(restaurants.slice(0, 5).map((r) => r.id)));
-    resetWheel();
-  };
-
-  const selectNone = () => {
-    setSelected(new Set());
-    resetWheel();
-  };
+  const selectAll = () => { setSelected(new Set(restaurants.map((r) => r.id))); resetWheel(); };
+  const selectTop5 = () => { setSelected(new Set(restaurants.slice(0, 5).map((r) => r.id))); resetWheel(); };
+  const selectNone = () => { setSelected(new Set()); resetWheel(); };
 
   return (
     <>
-      {/* Side-by-side layout: checklist left, wheel right */}
       <div className="flex flex-1 min-h-0">
 
-        {/* Left: scrollable checklist — width matches the tab bar above (~192px) */}
-        <div className="w-48 flex-shrink-0 flex flex-col border-r border-gray-200 bg-white">
-          <div className="px-3 pt-3 pb-2 border-b border-gray-100 flex-shrink-0">
-            <p className="text-xs font-semibold text-gray-600 mb-2">
+        {/* Left: scrollable checklist */}
+        <div className="w-48 flex-shrink-0 flex flex-col border-r-2 border-gray-800 bg-black">
+          <div className="px-3 pt-3 pb-2 border-b-2 border-gray-800 flex-shrink-0">
+            <p className="text-xs font-extrabold text-gray-300 uppercase tracking-wider mb-2">
               On wheel ({wheelItems.length})
             </p>
             <div className="flex gap-2 flex-wrap">
-              <button onClick={selectTop5} className="text-xs text-orange-600 font-semibold hover:text-orange-700">Top 5</button>
-              <button onClick={selectAll} className="text-xs text-gray-500 font-medium hover:text-gray-700">All</button>
-              <button onClick={selectNone} className="text-xs text-gray-400 font-medium hover:text-gray-600">None</button>
+              <button onClick={selectTop5} className="text-xs text-red-500 font-bold hover:text-red-400">Top 5</button>
+              <button onClick={selectAll} className="text-xs text-gray-500 font-bold hover:text-gray-300">All</button>
+              <button onClick={selectNone} className="text-xs text-gray-700 font-bold hover:text-gray-500">None</button>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto py-2 px-2 space-y-1">
             {restaurants.map((r, i) => {
               const isOn = selected.has(r.id);
               const wheelIdx = wheelItems.findIndex((w) => w.id === r.id);
-              const dotColor = wheelIdx >= 0 ? COLORS[wheelIdx % COLORS.length] : "#d1d5db";
+              const dotColor = wheelIdx >= 0 ? COLORS[wheelIdx % COLORS.length] : "#374151";
               return (
                 <button
                   key={r.id}
                   onClick={() => toggleRestaurant(r.id)}
-                  className={`w-full flex items-center gap-2 px-2 py-2 rounded-lg text-left transition-all ${
-                    isOn ? "bg-orange-50" : "opacity-40"
+                  className={`w-full flex items-center gap-2 px-2 py-2 rounded-xl text-left transition-all ${
+                    isOn ? "bg-gray-900" : "opacity-30"
                   }`}
                 >
-                  <div
-                    className={`w-4 h-4 rounded flex-shrink-0 flex items-center justify-center border-2 transition-colors ${
-                      isOn ? "bg-orange-500 border-orange-500" : "border-gray-300"
-                    }`}
-                  >
+                  <div className={`w-4 h-4 rounded-md flex-shrink-0 flex items-center justify-center border-2 transition-colors ${
+                    isOn ? "bg-red-600 border-red-600" : "border-gray-700"
+                  }`}>
                     {isOn && (
                       <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -202,18 +187,15 @@ export default function WheelTab({ restaurants }: Props) {
                     )}
                   </div>
                   <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
-                  <span className="text-xs font-medium text-gray-800 leading-tight line-clamp-2">{r.name}</span>
+                  <span className="text-xs font-medium text-gray-300 leading-tight line-clamp-2">{r.name}</span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Right: wheel + controls
-            Wheel size = min(available width, available height).
-            Available height = 100dvh - header(~114px) - spin+padding(~80px) = 100dvh - 194px
-            Available width  = 100dvw - left panel(192px) - padding(32px)    = 100dvw - 224px  */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-3 p-4 overflow-hidden">
+        {/* Right: wheel + controls */}
+        <div className="flex-1 flex flex-col items-center justify-center gap-3 p-4 overflow-hidden bg-gray-950">
           <div
             className="relative flex-shrink-0"
             style={{
@@ -223,17 +205,17 @@ export default function WheelTab({ restaurants }: Props) {
           >
             {/* Pointer */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 z-10">
-              <div className="w-0 h-0 border-l-[14px] border-r-[14px] border-t-[26px] border-l-transparent border-r-transparent border-t-orange-500 drop-shadow-md" />
+              <div className="w-0 h-0 border-l-[14px] border-r-[14px] border-t-[26px] border-l-transparent border-r-transparent border-t-red-600 drop-shadow-md" />
             </div>
             <div ref={wheelRef} className="absolute inset-0 pointer-events-none" style={{ willChange: "transform" }}>
-              <canvas ref={canvasRef} width={512} height={512} className="w-full h-full rounded-full shadow-xl" />
+              <canvas ref={canvasRef} width={512} height={512} className="w-full h-full rounded-full" />
             </div>
           </div>
 
           <button
             onClick={spin}
             disabled={spinning || wheelItems.length < 2}
-            className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 disabled:bg-orange-300 text-white font-bold py-3 rounded-2xl transition-colors shadow-sm text-base"
+            className="w-full bg-red-600 hover:bg-red-700 active:bg-red-800 disabled:bg-gray-800 disabled:text-gray-600 text-white font-extrabold py-3 rounded-2xl transition-colors text-base tracking-wide"
           >
             {spinning ? "Spinning…" : wheelItems.length < 2 ? "Select at least 2" : "Spin"}
           </button>
@@ -243,16 +225,14 @@ export default function WheelTab({ restaurants }: Props) {
             {winner && !spinning ? (
               <button
                 onClick={() => setOverlayRestaurant(winner)}
-                className="w-full h-full bg-white border-2 border-orange-400 rounded-2xl px-3 text-left hover:bg-orange-50 transition-colors shadow-sm flex flex-col justify-center"
+                className="w-full h-full bg-red-600 rounded-2xl px-4 text-left hover:bg-red-700 transition-colors flex flex-col justify-center"
               >
-                <p className="text-xs text-orange-600 font-semibold uppercase tracking-wide">
-                  Winner — tap for details
-                </p>
-                <p className="font-bold text-gray-900 text-sm truncate">{winner.name}</p>
+                <p className="text-xs text-red-200 font-bold uppercase tracking-widest">Winner — tap for details</p>
+                <p className="font-extrabold text-white text-sm truncate">{winner.name}</p>
               </button>
             ) : (
-              <div className="w-full h-full border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center">
-                <p className="text-xs text-gray-300 font-medium">Winner appears here</p>
+              <div className="w-full h-full border-2 border-gray-800 rounded-2xl flex items-center justify-center bg-gray-900">
+                <p className="text-xs text-gray-700 font-bold uppercase tracking-wider">Winner appears here</p>
               </div>
             )}
           </div>
