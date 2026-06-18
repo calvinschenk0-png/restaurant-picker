@@ -13,17 +13,17 @@ interface Props {
   onRestart: () => void;
 }
 
-type Tab = "top5" | "full" | "wheel" | "slots" | "knockout";
+type Tab = "list" | "wheel" | "slots" | "knockout";
 
 export default function ResultsView({ restaurants, locationName, onRestart }: Props) {
-  const [activeTab, setActiveTab] = useState<Tab>("top5");
+  const [activeTab, setActiveTab] = useState<Tab>("list");
   const [selected, setSelected] = useState<Restaurant | null>(null);
 
   const top5 = restaurants.slice(0, 5);
+  const rest = restaurants.slice(5);
 
   const tabs: { id: Tab; label: string }[] = [
-    { id: "top5", label: "Top 5" },
-    { id: "full", label: "Full List" },
+    { id: "list", label: "List" },
     { id: "wheel", label: "Wheel" },
     { id: "slots", label: "Slots" },
     { id: "knockout", label: "Knockout" },
@@ -66,22 +66,31 @@ export default function ResultsView({ restaurants, locationName, onRestart }: Pr
 
       {/* Tab content */}
       <div className="flex-1 bg-gray-50 flex flex-col overflow-hidden">
-        {activeTab === "top5" && (
+        {activeTab === "list" && (
           <div className="flex-1 overflow-y-auto">
-            <div className="max-w-lg mx-auto px-4 py-4 space-y-2">
-              {top5.length === 0 ? <EmptyState /> : top5.map((r) => (
-                <RestaurantCard key={r.id} restaurant={r} onTap={() => setSelected(r)} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {activeTab === "full" && (
-          <div className="flex-1 overflow-y-auto">
-            <div className="max-w-lg mx-auto px-4 py-4 space-y-2">
-              {restaurants.length === 0 ? <EmptyState /> : restaurants.map((r) => (
-                <RestaurantCard key={r.id} restaurant={r} onTap={() => setSelected(r)} />
-              ))}
+            <div className="max-w-lg mx-auto px-4 py-4">
+              {restaurants.length === 0 ? (
+                <EmptyState />
+              ) : (
+                <>
+                  <p className="text-xs font-extrabold text-orange-500 uppercase tracking-widest mb-3 px-1">Top Picks</p>
+                  <div className="space-y-2">
+                    {top5.map((r, i) => (
+                      <RestaurantCard key={r.id} restaurant={r} rank={i + 1} onTap={() => setSelected(r)} />
+                    ))}
+                  </div>
+                  {rest.length > 0 && (
+                    <>
+                      <p className="text-xs font-extrabold text-gray-300 uppercase tracking-widest mt-6 mb-3 px-1">More Nearby</p>
+                      <div className="space-y-2">
+                        {rest.map((r) => (
+                          <RestaurantCard key={r.id} restaurant={r} onTap={() => setSelected(r)} />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
         )}
