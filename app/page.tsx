@@ -15,7 +15,6 @@ interface LocationData {
 interface Preferences {
   cuisineValues: string[];
   price: string;
-  radiusMeters: number;
 }
 
 type Step = "location" | "preferences" | "loading" | "results";
@@ -40,7 +39,7 @@ export default function Home() {
       const params = new URLSearchParams({
         lat: locationData.lat.toString(),
         lng: locationData.lng.toString(),
-        radiusMeters: prefs.radiusMeters.toString(),
+        radiusMeters: "16093", // fixed 10 miles; results ranked by distance
       });
       if (prefs.cuisineValues.length > 0) {
         params.set("cuisines", prefs.cuisineValues.join(","));

@@ -4,7 +4,6 @@ import { useState } from "react";
 interface Preferences {
   cuisineValues: string[];
   price: string;
-  radiusMeters: number;
 }
 
 interface Props {
@@ -38,18 +37,10 @@ const PRICE_OPTIONS = [
   { label: "Any", value: "" },
 ];
 
-const DISTANCE_OPTIONS = [
-  { label: "1 mi", value: 1609 },
-  { label: "3 mi", value: 4828 },
-  { label: "5 mi", value: 8047 },
-  { label: "10 mi", value: 16093 },
-];
-
 export default function PreferencesStep({ locationName, onBack, onSearch, error }: Props) {
   const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
   const [noPreferenceCuisine, setNoPreferenceCuisine] = useState(true);
   const [price, setPrice] = useState("");
-  const [radiusMeters, setRadiusMeters] = useState(8047);
 
   const handleToggle = (label: string) => {
     const next = selectedLabels.includes(label)
@@ -66,7 +57,7 @@ export default function PreferencesStep({ locationName, onBack, onSearch, error 
 
   const handleSearch = () => {
     const cuisineValues = CUISINES.filter((c) => selectedLabels.includes(c.label)).flatMap((c) => c.values);
-    onSearch({ cuisineValues, price, radiusMeters });
+    onSearch({ cuisineValues, price });
   };
 
   return (
@@ -134,26 +125,6 @@ export default function PreferencesStep({ locationName, onBack, onSearch, error 
                 }`}
               >
                 {p.label}
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* Distance */}
-        <section>
-          <h2 className="text-xs font-extrabold text-gray-500 uppercase tracking-widest mb-3">Distance</h2>
-          <div className="grid grid-cols-4 gap-2">
-            {DISTANCE_OPTIONS.map((d) => (
-              <button
-                key={d.value}
-                onClick={() => setRadiusMeters(d.value)}
-                className={`py-3 rounded-xl text-sm font-bold border-2 transition-all ${
-                  radiusMeters === d.value
-                    ? "bg-red-600 border-red-600 text-white"
-                    : "bg-gray-900 border-gray-800 text-gray-300 hover:border-red-800 hover:bg-gray-800"
-                }`}
-              >
-                {d.label}
               </button>
             ))}
           </div>
