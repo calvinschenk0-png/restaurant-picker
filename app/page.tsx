@@ -14,7 +14,6 @@ interface LocationData {
 
 interface Preferences {
   cuisineValues: string[];
-  price: string;
 }
 
 type Step = "location" | "preferences" | "loading" | "results";

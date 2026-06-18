@@ -3,7 +3,6 @@ import { useState } from "react";
 
 interface Preferences {
   cuisineValues: string[];
-  price: string;
 }
 
 interface Props {
@@ -30,17 +29,9 @@ const CUISINES = [
   { label: "Steak", values: ["steak_house"] },
 ];
 
-const PRICE_OPTIONS = [
-  { label: "$", value: "1" },
-  { label: "$$", value: "2" },
-  { label: "$$$", value: "3" },
-  { label: "Any", value: "" },
-];
-
 export default function PreferencesStep({ locationName, onBack, onSearch, error }: Props) {
   const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
   const [noPreferenceCuisine, setNoPreferenceCuisine] = useState(true);
-  const [price, setPrice] = useState("");
 
   const handleToggle = (label: string) => {
     const next = selectedLabels.includes(label)
@@ -57,7 +48,7 @@ export default function PreferencesStep({ locationName, onBack, onSearch, error 
 
   const handleSearch = () => {
     const cuisineValues = CUISINES.filter((c) => selectedLabels.includes(c.label)).flatMap((c) => c.values);
-    onSearch({ cuisineValues, price });
+    onSearch({ cuisineValues });
   };
 
   return (
@@ -108,26 +99,6 @@ export default function PreferencesStep({ locationName, onBack, onSearch, error 
           >
             No preference — surprise me
           </button>
-        </section>
-
-        {/* Price */}
-        <section>
-          <h2 className="text-xs font-extrabold text-gray-500 uppercase tracking-widest mb-3">Price Range</h2>
-          <div className="grid grid-cols-4 gap-2">
-            {PRICE_OPTIONS.map((p) => (
-              <button
-                key={p.label}
-                onClick={() => setPrice(p.value)}
-                className={`py-3 rounded-xl text-sm font-bold border-2 transition-all ${
-                  price === p.value
-                    ? "bg-red-600 border-red-600 text-white"
-                    : "bg-gray-900 border-gray-800 text-gray-300 hover:border-red-800 hover:bg-gray-800"
-                }`}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
         </section>
 
         {error && (
