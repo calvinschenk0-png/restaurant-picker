@@ -85,6 +85,7 @@ export default function WheelTab({ restaurants }: Props) {
   const [spinning, setSpinning] = useState(false);
   const [winner, setWinner] = useState<Restaurant | null>(null);
   const [overlayRestaurant, setOverlayRestaurant] = useState<Restaurant | null>(null);
+  const [search, setSearch] = useState("");
   const totalRotationRef = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
@@ -158,14 +159,21 @@ export default function WheelTab({ restaurants }: Props) {
             <p className="text-xs font-extrabold text-gray-300 uppercase tracking-wider mb-2">
               On wheel ({wheelItems.length})
             </p>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 flex-wrap mb-2">
               <button onClick={selectTop5} className="text-xs text-red-500 font-bold hover:text-red-400">Top 5</button>
               <button onClick={selectAll} className="text-xs text-gray-500 font-bold hover:text-gray-300">All</button>
               <button onClick={selectNone} className="text-xs text-gray-700 font-bold hover:text-gray-500">None</button>
             </div>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search…"
+              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-gray-200 placeholder-gray-600 focus:outline-none focus:border-red-600"
+            />
           </div>
           <div className="flex-1 overflow-y-auto py-2 px-2 space-y-1">
-            {restaurants.map((r, i) => {
+            {restaurants.filter((r) => r.name.toLowerCase().includes(search.toLowerCase())).map((r) => {
               const isOn = selected.has(r.id);
               const wheelIdx = wheelItems.findIndex((w) => w.id === r.id);
               const dotColor = wheelIdx >= 0 ? COLORS[wheelIdx % COLORS.length] : "#374151";
